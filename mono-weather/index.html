@@ -36,8 +36,15 @@
     </div>
     <button class="retry" id="retry" type="button" hidden>Retry</button>
   </main>
-  <script type="module">
-    import { fetchFukuokaForecast, forecastDayLabel, weatherForCode } from "./weather.mjs";
+  <script src="./weather.js"></script>
+  <script src="./mock-weather.js"></script>
+  <script>
+    const { fetchFukuokaForecast, forecastDayLabel, weatherForCode, createMockForecast } = WeatherWidget;
+
+    const useMock = new URLSearchParams(location.search).get("live") !== "1";
+    if (useMock) {
+      document.querySelector(".attribution").textContent = "Sample weather data";
+    }
 
     const message = document.getElementById("message");
     const retry = document.getElementById("retry");
@@ -82,7 +89,7 @@
       retry.hidden = true;
       refresh.disabled = true;
       try {
-        const data = await fetchFukuokaForecast();
+        const data = useMock ? createMockForecast() : await fetchFukuokaForecast();
         const icon = document.getElementById("current-icon");
         icon.src = data.current.icon;
         icon.alt = data.current.label;
