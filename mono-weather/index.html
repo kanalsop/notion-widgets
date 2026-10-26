@@ -73,10 +73,10 @@
       temperatures.className = "day-temperatures";
       const high = document.createElement("span");
       high.className = "day-high";
-      high.textContent = `${day.high}°`;
+      high.textContent = `${day.high}℃`;
       const low = document.createElement("span");
       low.className = "day-low";
-      low.textContent = `${day.low}°`;
+      low.textContent = `${day.low}℃`;
 
       temperatures.append(high, low);
       card.append(name, icon, temperatures);
