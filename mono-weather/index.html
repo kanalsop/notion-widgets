@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Weather</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <main class="weather" aria-label="Fukuoka weather">
+    <p class="message" id="message" role="status">Loading weather…</p>
+    <div class="weather-content" id="weather-content" hidden>
+      <div class="weather-scroll">
+        <div class="weather-row">
+          <section class="current" aria-label="Current weather in Fukuoka">
+            <p class="place">FUKUOKA WEATHER</p>
+            <div class="current-reading" id="current-reading" hidden>
+              <img class="current-icon" id="current-icon" alt="">
+              <div>
+                <div class="temperature"><span id="current-temperature">--</span>°C</div>
+                <div class="condition" id="current-condition"></div>
+              </div>
+            </div>
+            <button class="refresh" id="refresh" type="button" aria-label="Refresh weather">↻</button>
+          </section>
+          <section class="forecast-section" aria-label="Weekly forecast">
+            <div class="forecast" id="forecast" role="list"></div>
+          </section>
+        </div>
+      </div>
+      <p class="attribution">
+        Weather data by
+        <a href="https://open-meteo.com/" target="_blank" rel="noreferrer">Open-Meteo</a>
+      </p>
+    </div>
+    <button class="retry" id="retry" type="button" hidden>Retry</button>
+  </main>
+  <script src="./weather.js"></script>
+  <script src="./mock-weather.js"></script>
+  <script>
+    const { fetchFukuokaForecast, forecastDayLabel, weatherForCode, createMockForecast } = WeatherWidget;
+
+    const useMock = new URLSearchParams(location.search).get("live") !== "1";
+    if (useMock) {
+      document.querySelector(".attribution").textContent = "Sample weather data";
+    }
+
+    const message = document.getElementById("message");
+    const retry = document.getElementById("retry");
+    const refresh = document.getElementById("refresh");
+    const currentReading = document.getElementById("current-reading");
+    const weatherContent = document.getElementById("weather-content");
+    const forecast = document.getElementById("forecast");
+
+    function renderDay(day, index) {
+      const condition = weatherForCode(day.code);
+      const card = document.createElement("article");
+      card.className = "day";
+      card.setAttribute("role", "listitem");
+      const accessibleLabel = `${forecastDayLabel(day.date, index)}: ${condition.label}, `
+        + `high ${day.high} degrees, low ${day.low} degrees`;
+      card.setAttribute("aria-label", accessibleLabel);
+
+      const name = document.createElement("span");
+      name.className = "day-name";
+      name.textContent = forecastDayLabel(day.date, index);
+      const icon = document.createElement("img");
+      icon.className = "day-icon";
+      icon.src = condition.icon;
+      icon.alt = condition.label;
+      const temperatures = document.createElement("span");
+      temperatures.className = "day-temperatures";
+      const high = document.createElement("span");
+      high.className = "day-high";
+      high.textContent = `${day.high}℃`;
+      const low = document.createElement("span");
+      low.className = "day-low";
+      low.textContent = `${day.low}℃`;
+
+      temperatures.append(high, low);
+      card.append(name, icon, temperatures);
+      return card;
+    }
+
+    async function loadWeather() {
+      message.hidden = false;
+      message.textContent = "Loading weather…";
+      retry.hidden = true;
+      refresh.disabled = true;
+      try {
+        const data = useMock ? createMockForecast() : await fetchFukuokaForecast();
+        const icon = document.getElementById("current-icon");
+        icon.src = data.current.icon;
+        icon.alt = data.current.label;
+        document.getElementById("current-temperature").textContent = data.current.temperature;
+        document.getElementById("current-condition").textContent = data.current.label;
+        forecast.replaceChildren(...data.days.map(renderDay));
+        currentReading.hidden = false;
+        weatherContent.hidden = false;
+        message.hidden = true;
+      } catch (error) {
+        currentReading.hidden = true;
+        weatherContent.hidden = true;
+        message.textContent = error instanceof Error
+          ? `Unable to load weather. ${error.message}`
+          : "Unable to load weather. Check your connection and try again.";
+        retry.hidden = false;
+      } finally {
+        refresh.disabled = false;
+      }
+    }
+
+    retry.addEventListener("click", loadWeather);
+    refresh.addEventListener("click", loadWeather);
+    loadWeather();
+  </script>
+</body>
+</html>

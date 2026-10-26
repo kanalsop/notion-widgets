@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Notion Widgets</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <main>
+    <header class="page-header">
+      <h1>Notion Widgets</h1>
+      <p>Simple clock and weather widgets for your home page.</p>
+    </header>
+    <section class="widget" aria-labelledby="clock-title">
+      <div class="widget-header">
+        <div>
+          <h2 id="clock-title">Clock</h2>
+          <p>A 24-hour clock with the weekday in Japan time.</p>
+        </div>
+        <a href="./simple-clock/index.html">Open clock →</a>
+      </div>
+      <iframe class="clock-preview" src="./simple-clock/index.html" title="Clock preview"></iframe>
+    </section>
+    <section class="widget" aria-labelledby="weather-title">
+      <div class="widget-header">
+        <div>
+          <h2 id="weather-title">Weather</h2>
+          <p>Current weather and a seven-day forecast for Fukuoka. Preview uses sample data.</p>
+        </div>
+        <a href="./mono-weather/index.html?live=1">Open weather →</a>
+      </div>
+      <iframe class="weather-preview" src="./mono-weather/index.html" title="Weather preview with sample data"></iframe>
+      <a class="sample-link" href="./mono-weather/index.html">Open sample weather →</a>
+    </section>
+  </main>
+</body>
+</html>
