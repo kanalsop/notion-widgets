@@ -17,8 +17,8 @@ h1 { margin-bottom: 18px; font-size: 18px; font-weight: 650; text-align: center;
 
 .weather-row {
   display: grid;
-  grid-template-columns: 1.1fr 2fr;
-  align-items: stretch;
+  grid-template-columns: 0.8fr 2fr;
+  align-items: center;
   gap: 12px;
   width: 100%;
   margin: 0 auto;
@@ -28,7 +28,7 @@ h1 { margin-bottom: 18px; font-size: 18px; font-weight: 650; text-align: center;
 .current {
   position: relative;
   display: flex;
-  min-height: 102.4px;
+  align-self: stretch;
   flex-direction: column;
   justify-content: center;
   gap: 11.2px;
@@ -72,7 +72,6 @@ h1 { margin-bottom: 18px; font-size: 18px; font-weight: 650; text-align: center;
 
 .day {
   display: flex;
-  min-height: 170px;
   flex-direction: column;
   align-items: center;
   gap: 11px;
@@ -82,7 +81,7 @@ h1 { margin-bottom: 18px; font-size: 18px; font-weight: 650; text-align: center;
 
 .day-name {
   color: #62686c;
-  font-size: clamp(13px, 2.4vw, 18px);
+  font-size: clamp(10px, 2vw, 15px);
   font-weight: 600;
   white-space: nowrap;
 }
@@ -92,7 +91,7 @@ h1 { margin-bottom: 18px; font-size: 18px; font-weight: 650; text-align: center;
 .day-temperatures {
   display: flex;
   gap: 13px;
-  font-size: 16px;
+  font-size: 14px;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
